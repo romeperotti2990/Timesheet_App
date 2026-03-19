@@ -1,1 +1,11 @@
-<p>departments works!</p>
+<div>
+    <mat-card>
+        <mat-list>
+            @for (department of departments; track department.id) {
+            <mat-list-item>
+                {{department.name}}
+            </mat-list-item>
+            }
+        </mat-list>
+    </mat-card>
+</div>
