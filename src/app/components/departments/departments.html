@@ -1,8 +1,8 @@
-<div>
+<div class="main-container">
     <mat-card>
         <mat-list>
             @for (department of departments; track department.id) {
-            <mat-list-item>
+            <mat-list-item (click)="goToDepartment(department.id)">
                 {{department.name}}
             </mat-list-item>
             }
