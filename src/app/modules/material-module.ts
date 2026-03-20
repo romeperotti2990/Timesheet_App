@@ -29,6 +29,7 @@ import { MatTabsModule } from '@angular/material/tabs';
     MatTabsModule,
   ],
   exports: [
+    CommonModule,
     RouterModule, // not there in the tutorial
     MatToolbarModule,
     MatButtonModule,

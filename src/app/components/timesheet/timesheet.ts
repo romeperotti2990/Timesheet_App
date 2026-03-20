@@ -9,6 +9,7 @@ import { JsonPipe } from '@angular/common';
 
 @Component({
   selector: 'app-timesheet',
+  standalone: true,
   imports: [MaterialModule, JsonPipe],
   templateUrl: './timesheet.html',
   styleUrl: './timesheet.scss'
@@ -80,5 +81,5 @@ export class Timesheet implements OnInit {
     // it starts at the given index and removes 1 element.
     this.employees.splice(index, 1);
   }
-  
+
 }
