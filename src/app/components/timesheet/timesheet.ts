@@ -20,6 +20,7 @@ export class Timesheet implements OnInit {
   employeeNameFC = new FormControl('', this.nameValidator()); // <-- New FormControl Instance
   employees: Employee[] = [];
   employeeId = 0;
+  weekdays: string[] = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
 
   constructor(private departmentsService: DepartmentsService,
     private route: ActivatedRoute) { }
@@ -37,12 +38,18 @@ export class Timesheet implements OnInit {
 
       this.employees.push({
         id: this.employeeId.toString(),
-        departmentId: this.department?.id, // Note the use of the ? operator
+        departmentId: this.department?.id,
         name: this.employeeNameFC.value,
-        payRate: Math.floor(Math.random() * 50) + 50, // Assigns a random pay rate
+        payRate: Math.floor(Math.random() * 50) + 50,
+        monday: 0,    // <-- Initialized
+        tuesday: 0,   // <-- Initialized
+        wednesday: 0, // <-- Initialized
+        thursday: 0,  // <-- Initialized
+        friday: 0,    // <-- Initialized
+        saturday: 0,  // <-- Initialized
+        sunday: 0     // <-- Initialized
       });
 
-      // Clear the input field after successful submission
       this.employeeNameFC.setValue('');
     }
   }
@@ -62,4 +69,16 @@ export class Timesheet implements OnInit {
       return error; // Returns {duplicate: true} on failure, or null on success
     };
   }
+
+  getTotalHours(employee: Employee): number {
+    return employee.monday + employee.tuesday + employee.wednesday
+      + employee.thursday + employee.friday + employee.saturday + employee.sunday;
+  }
+
+  deleteEmployee(index: number): void {
+    // The splice() method removes elements from an array: 
+    // it starts at the given index and removes 1 element.
+    this.employees.splice(index, 1);
+  }
+  
 }

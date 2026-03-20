@@ -44,3 +44,29 @@ body {
   justify-content: center;
   height: calc(100% - 64px);
 }
+
+table {
+  border-collapse: collapse;
+  /* Ensures borders merge nicely */
+  width: 100%;
+  /* Makes table take up the full card width */
+}
+
+th {
+  border-bottom: 1px solid black;
+
+  /* Styling to create space between columns */
+  &:not(:first-child) {
+    padding-left: 15px;
+  }
+}
+
+td {
+  text-align: center;
+  padding: 10px 0px;
+}
+
+tr td {
+  border-bottom: 1pt solid #C1C1C1;
+  /* Adds light gray divider between rows */
+}
