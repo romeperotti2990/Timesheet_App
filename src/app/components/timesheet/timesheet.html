@@ -1,7 +1,26 @@
 <div class="main-container">
     <div class="cards">
         @if (department) {
-        <h2>{{department.name}}</h2>
+        <h2>{{ department.name }}</h2>
         }
+        <mat-card>
+            <div class="add-employee-row">
+                <mat-form-field>
+                    <input [formControl]="employeeNameFC" matInput placeholder="Employee Name" type="text">
+
+                    @if (employeeNameFC.hasError('duplicate')) {
+                    <mat-error>Duplicate Name</mat-error>
+                    }
+                </mat-form-field>
+
+                <button (click)="addEmployee()" [disabled]="employeeNameFC.invalid" color="primary" mat-mini-fab>
+                    <mat-icon>add</mat-icon>
+                </button>
+            </div>
+
+            @if(employees && employees.length > 0) {
+            <div>{{ employees | json }}</div>
+            }
+        </mat-card>
     </div>
 </div>
