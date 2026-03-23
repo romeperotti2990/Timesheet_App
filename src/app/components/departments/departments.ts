@@ -4,6 +4,7 @@ import { Department } from '../../interfaces/department';
 import { CommonModule } from '@angular/common';
 import { MaterialModule } from '../../modules/material-module';
 import { Router } from '@angular/router';
+import { Observable } from 'rxjs';
 
 @Component({
   selector: 'app-departments',
@@ -13,8 +14,7 @@ import { Router } from '@angular/router';
   styleUrls: ['./departments.scss']
 })
 export class Departments implements OnInit {
-  departments: Department[] = [];
-  department?: Department;
+  $departments!: Observable<Department[]>;
 
   constructor(
     private departmentsService: DepartmentsService,
@@ -22,10 +22,7 @@ export class Departments implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    // Replace hard-coded retrieval with subscription to the HTTP Observable
-    this.departmentsService.getDepartments().subscribe(departments => {
-      this.departments = departments;
-    });
+    this.$departments = this.departmentsService.getDepartments();
   }
 
   goToDepartment(departmentId: string): void {
