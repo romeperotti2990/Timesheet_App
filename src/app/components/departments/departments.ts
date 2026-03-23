@@ -13,7 +13,8 @@ import { Router } from '@angular/router';
   styleUrls: ['./departments.scss']
 })
 export class Departments implements OnInit {
-  departments!: Department[];
+  departments: Department[] = [];
+  department?: Department;
 
   constructor(
     private departmentsService: DepartmentsService,
@@ -21,7 +22,10 @@ export class Departments implements OnInit {
   ) { }
 
   ngOnInit(): void {
-    this.departments = this.departmentsService.departments;
+    // Replace hard-coded retrieval with subscription to the HTTP Observable
+    this.departmentsService.getDepartments().subscribe(departments => {
+      this.departments = departments;
+    });
   }
 
   goToDepartment(departmentId: string): void {
