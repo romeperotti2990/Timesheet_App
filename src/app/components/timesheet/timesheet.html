@@ -1,7 +1,7 @@
 <div class="main-container">
     <div class="cards">
-        @if (department) {
-        <h2>{{ department.name }}</h2>
+        @if ($department | async; as department) {
+        <h2>Timesheet for {{ department?.name }}</h2>
         }
         <mat-card>
             <div class="add-employee-row">
@@ -18,55 +18,43 @@
                 </button>
             </div>
 
-            @if(employees && employees.length > 0) {
-            <div>{{ employees | json }}</div>
+            @if (employees().length > 0) {
+            <div>{{ employees() | json }}</div>
             }
         </mat-card>
+        @if (employees().length > 0) {
         <mat-card class="hours">
             <table>
                 <thead>
                     <th>Name</th>
-                    @for (day of weekdays; track day) { <th>{{day | titlecase}}</th>
+                    @for (day of weekdays; track day) {
+                    <th>{{ day | titlecase}}</th>
                     }
-                    <th>Total Hours</th>
-                    <th></th>
-                </thead>
-            </table>
-        </mat-card>
-        @if(employees && employees.length > 0) {
-        <mat-card class="hours">
-            <table>
-                <thead>
-                    <th>Name</th>
-                    @for (day of weekdays; track day) { <th>{{day | titlecase}}</th> }
                     <th>Total Hours</th>
                     <th></th>
                 </thead>
                 <tbody>
-                    @for (employee of employees; track employee.id; let i = $index) {
+                    @for (employee of employees(); track employee.id; let i = $index) {
                     <tr [class.odd-row]="i % 2 !== 0">
-                        <td>{{employee.name}}</td>
+                        <td>{{ employee.name }}</td>
                         @for (day of weekdays; track day) {
                         <td>
-                            <input type="number" [id]="day" [(ngModel)]="employee[day]" class="hours-input" min="0" max="24">
+                            <input type="number" [id]="day" [(ngModel)]="employee[day]" class="hours-input" min="0"
+                                max="24">
                         </td>
                         }
-                        <td class="total-cell">{{getTotalHours(employee)}}</td>
-                        @for (employee of employees; track employee.id; let i = $index) {
-                        <tr [class.odd-row]="i % 2 !== 0">
-                            <td class="total-cell">{{getTotalHours(employee)}}</td>
-                        
-                            <td>
-                                <button mat-icon-button (click)="deleteEmployee(i)">
-                                    <mat-icon>delete</mat-icon>
-                                </button>
-                            </td>
-                        </tr>
-                        }
+                        <td class="total-cell">{{ getTotalHours(employee) }}</td>
+
+                        <td>
+                            <button mat-icon-button (click)="deleteEmployee(i)">
+                                <mat-icon>delete</mat-icon>
+                            </button>
+                        </td>
                     </tr>
                     }
                 </tbody>
             </table>
+            <button mat-raised-button color="primary" class="submit" (click)="submit()">Submit</button>
         </mat-card>
         }
     </div>

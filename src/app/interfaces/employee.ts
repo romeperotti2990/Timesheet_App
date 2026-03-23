@@ -1,9 +1,8 @@
 export interface Employee {
-    id: string;
-    departmentId: string | undefined;
+    id?: string; // <-- Add the '?' to make it optional
+    departmentId?: string; // must be defined when saving
     name: string;
     payRate: number;
-    // New properties for hours tracking
     monday: number;
     tuesday: number;
     wednesday: number;
@@ -11,7 +10,5 @@ export interface Employee {
     friday: number;
     saturday: number;
     sunday: number;
-
-    // Index Signature: Required for [(ngModel)]="employee[day]" binding
-    [key: string]: string | undefined | number;
+    [key: string]: string | number | undefined;
 }
