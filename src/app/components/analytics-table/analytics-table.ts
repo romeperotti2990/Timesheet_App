@@ -1,33 +1,41 @@
-import { Component, Input, OnInit } from '@angular/core'; // <-- Import Input and OnInit
-import { CommonModule } from '@angular/common';
-import { MaterialModule } from '../../modules/material-module';
+import { Component, inject, Input, OnChanges, OnInit, SimpleChanges } from '@angular/core';
 import { Employee } from '../../interfaces/employee';
+import { AsyncPipe, CurrencyPipe, DecimalPipe, TitleCasePipe } from '@angular/common';
+import { EmployeeService } from '../../services/employee';
+import { Observable, of } from 'rxjs';
 
 @Component({
-  selector: 'app-analytics-table',
   standalone: true,
-  imports: [CommonModule, MaterialModule],
+  selector: 'app-analytics-table',
+  imports: [
+    DecimalPipe,
+    CurrencyPipe,
+    TitleCasePipe,
+    AsyncPipe
+  ],
   templateUrl: './analytics-table.html',
-  styleUrls: ['./analytics-table.scss']
+  styleUrl: './analytics-table.scss'
 })
-export class AnalyticsTable implements OnInit {
-  // New Input property to receive the department ID from the parent
-  @Input() departmentId: string | undefined;
-
-  // We'll define the full employee data array here to filter against
-  @Input() employeeData: Employee[] = [];
-
-  // The data array we will actually loop over in the template
-  employees: Employee[] = [];
-
+export class AnalyticsTable implements OnInit, OnChanges {
   weekdays: string[] = ['monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday'];
+  employees$: Observable<Employee[]> = of([]);
+  @Input() departmentId!: string;
+  private employeeService: EmployeeService = inject(EmployeeService);
 
-  ngOnInit(): void {
-    // Filter the full employeeData array based on the received departmentId
-    this.employees = this.employeeData.filter(employee => employee.departmentId === this.departmentId);
+  ngOnInit() {
+    if (this.departmentId) {
+      this.employees$ = this.employeeService.getEmployeeHoursByDepartment(this.departmentId);
+    }
   }
 
-  // Function to calculate total hours (copied from TimesheetComponent logic)
+  ngOnChanges(changes: SimpleChanges): void {
+    // React to departmentId input changes
+    if (changes['departmentId'] && this.departmentId) {
+      // Fetch new data whenever the departmentId input changes
+      this.employees$ = this.employeeService.getEmployeeHoursByDepartment(this.departmentId);
+    }
+  }
+
   getTotalHours(employee: Employee): number {
     return employee.monday + employee.tuesday + employee.wednesday
       + employee.thursday + employee.friday + employee.saturday + employee.sunday;
